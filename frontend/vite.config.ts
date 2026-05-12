@@ -13,9 +13,19 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      "/auth": "http://localhost:8000",
-      "/documents": "http://localhost:8000",
-      "/health": "http://localhost:8000",
+      "/auth": { target: "http://localhost:8000", changeOrigin: true },
+      "/health": { target: "http://localhost:8000", changeOrigin: true },
+      "/documents": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+        bypass(req) {
+          // Browser page navigation sends Accept: text/html → serve SPA
+          // Axios API calls don't include text/html → proxy to backend
+          if (req.headers.accept?.includes("text/html")) {
+            return "/index.html";
+          }
+        },
+      },
     },
   },
 });
