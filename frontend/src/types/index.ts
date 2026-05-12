@@ -34,6 +34,21 @@ export interface SearchResult {
   items: Document[];
 }
 
+export interface DocumentAnalysis {
+  title: string;
+  type: DocumentType;
+  author: string;
+  tags: string[];
+  summary: string | null;
+}
+
+export interface DocumentUpdate {
+  title?: string;
+  type?: DocumentType;
+  author?: string;
+  tags?: string[];
+}
+
 export interface SearchFilters {
   q?: string;
   type?: string;

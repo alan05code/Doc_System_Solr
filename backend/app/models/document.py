@@ -3,13 +3,29 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 
 DOCUMENT_TYPES = ["contratto", "fattura", "ordine", "cv", "comunicazione", "altro"]
+_TYPE_PATTERN = "^(contratto|fattura|ordine|cv|comunicazione|altro)$"
 
 
 class DocumentMeta(BaseModel):
     title: str = Field(..., min_length=1, max_length=200)
-    type: str = Field(..., pattern="^(contratto|fattura|ordine|cv|comunicazione|altro)$")
+    type: str = Field(..., pattern=_TYPE_PATTERN)
     author: str = Field(..., min_length=1, max_length=100)
     tags: List[str] = Field(default_factory=list)
+
+
+class DocumentUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    type: Optional[str] = Field(None, pattern=_TYPE_PATTERN)
+    author: Optional[str] = Field(None, min_length=1, max_length=100)
+    tags: Optional[List[str]] = None
+
+
+class DocumentAnalysis(BaseModel):
+    title: str
+    type: str
+    author: str
+    tags: List[str]
+    summary: Optional[str]
 
 
 class DocumentOut(BaseModel):
@@ -36,7 +52,7 @@ class SearchResult(BaseModel):
 
 
 class SearchFilters(BaseModel):
-    q: str = Field(default="*", description="Full-text query")
+    q: str = Field(default="*")
     type: Optional[str] = None
     author: Optional[str] = None
     date_from: Optional[datetime] = None

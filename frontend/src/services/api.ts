@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { AuthToken, DocumentDetail, SearchFilters, SearchResult } from "@/types";
+import type { AuthToken, DocumentAnalysis, DocumentDetail, DocumentUpdate, SearchFilters, SearchResult } from "@/types";
 
 const api = axios.create({
   baseURL: "",
@@ -47,8 +47,22 @@ export const documentsApi = {
   list: (page = 1, pageSize = 10) =>
     api.get<SearchResult>("/documents/", { params: { page, page_size: pageSize } }),
 
+  analyze: (file: File) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    return api.post<DocumentAnalysis>("/documents/analyze", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+
   getById: (id: string) =>
     api.get<DocumentDetail>(`/documents/${id}`),
+
+  update: (id: string, data: DocumentUpdate) =>
+    api.patch<DocumentDetail>(`/documents/${id}`, data),
+
+  delete: (id: string) =>
+    api.delete(`/documents/${id}`),
 
   download: (id: string, filename: string) =>
     api.get(`/documents/${id}/download`, { responseType: "blob" }).then((res) => {
