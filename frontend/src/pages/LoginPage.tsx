@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FileText, Loader2, Lock, User } from "lucide-react";
 import { authApi } from "@/services/api";
@@ -11,9 +11,16 @@ interface Props {
 
 export default function LoginPage({ onLogin }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // return URL: from ProtectedRoute state, or ?next= param (from 401 interceptor)
+  const returnTo: string =
+    (location.state as { from?: string } | null)?.from ??
+    new URLSearchParams(location.search).get("next") ??
+    "/dashboard";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ export default function LoginPage({ onLogin }: Props) {
     try {
       const { data } = await authApi.login(username.trim(), password);
       onLogin(data.access_token, data.user);
-      navigate("/dashboard");
+      navigate(returnTo, { replace: true });
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
