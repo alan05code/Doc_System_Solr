@@ -1,0 +1,7 @@
+# Italian synonyms
+# format: word1, word2, word3
+# or: word1 => word2
+
+contratto, accordo, convenzione
+fattura, ricevuta, bolletta
+documento, file, allegato

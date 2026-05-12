@@ -1,5 +1,9 @@
 """Verifica che il core Solr 'documents' sia attivo e raggiungibile."""
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import httpx
 
 from app.core.config import get_settings
