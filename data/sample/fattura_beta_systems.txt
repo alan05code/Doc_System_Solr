@@ -1,0 +1,29 @@
+FATTURA ELETTRONICA
+
+Emittente: Beta Systems S.r.l.
+Via Tecnologia 23, Torino (TO)
+P.IVA: 02345678901 - C.F.: 02345678901
+Tel: 011-9876543 | email: amministrazione@betasystems.it
+
+Destinatario: Rossi & Figli S.r.l.
+Via Roma 12, Milano (MI)
+P.IVA: 01234567890
+
+Numero fattura: FT-2024-0087
+Data emissione: 10 marzo 2024
+Data scadenza: 09 aprile 2024 (30 gg)
+
+DESCRIZIONE SERVIZI:
+1. Licenze software gestionale ERP (annuali) x 5 utenti   € 4.500,00
+2. Assistenza tecnica e manutenzione (Q1 2024) 20 ore     € 1.800,00
+3. Installazione aggiornamenti versione 3.2               €   350,00
+
+Imponibile:    € 6.650,00
+IVA 22%:       € 1.463,00
+TOTALE:        € 8.113,00
+
+Modalità di pagamento: Bonifico bancario
+IBAN: IT60 X054 2811 1010 0000 0123 456
+Causale: FT-2024-0087
+
+La presente fattura è redatta ai sensi dell'art. 21 DPR 633/72.

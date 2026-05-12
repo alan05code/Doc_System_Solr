@@ -1,0 +1,34 @@
+ORDINE DI ACQUISTO
+
+Azienda emittente: Rossi & Figli S.r.l.
+Via Roma 12 – 20121 Milano (MI)
+P.IVA: 01234567890
+Tel: 02-55667788
+
+Numero ordine: OA-2024-042
+Data ordine: 5 febbraio 2024
+Fornitore: Gamma Ufficio S.r.l., Via Commercio 33, Brescia (BS)
+
+PRODOTTI ORDINATI:
+
+Codice    Descrizione                          Quantità   Prezzo unit.   Totale
+GU-001    Scrivania regolabile in altezza         4 pz      € 450,00    € 1.800,00
+GU-002    Sedia ergonomica mod. ErgoMax           8 pz      € 280,00    € 2.240,00
+GU-003    Monitor 27" 4K IPS                      4 pz      € 520,00    € 2.080,00
+GU-004    Lampada da tavolo LED                   8 pz       € 45,00      € 360,00
+
+Subtotale:    € 6.480,00
+IVA 22%:      € 1.425,60
+TOTALE:       € 7.905,60
+
+ISTRUZIONI DI CONSEGNA:
+- Indirizzo consegna: Via Roma 12, 20121 Milano (magazzino piano terra)
+- Data consegna richiesta: entro il 20 febbraio 2024
+- Orario: 8:00 – 17:00 (lunedì-venerdì)
+- Referente: Sig. Luca Ferrari, tel. 335-9988776
+
+NOTE:
+Si prega di allegare DDT e documento di trasporto in originale.
+Indicare numero ordine OA-2024-042 su tutti i documenti di spedizione.
+
+Firma autorizzata: _______________

@@ -1,0 +1,39 @@
+CURRICULUM VITAE
+
+Nome: Mario Bianchi
+Data di nascita: 14/05/1989
+Residenza: Via Verdi 5, Bologna (BO)
+Email: mario.bianchi@email.it
+Telefono: 335-1122334
+
+PROFILO PROFESSIONALE
+Sviluppatore software con 8 anni di esperienza nello sviluppo di applicazioni web e backend. Specializzato in Python, FastAPI, e sistemi distribuiti. Esperienza nella gestione di team tecnici di 3-5 persone.
+
+ESPERIENZE LAVORATIVE
+
+2020 – presente | Senior Software Developer – Tech Solutions S.r.l., Bologna
+- Sviluppo e manutenzione di API REST in Python/FastAPI
+- Gestione infrastruttura cloud su AWS (EC2, RDS, S3)
+- Coordinamento team di 4 sviluppatori junior
+- Introduzione pratiche DevOps: CI/CD con GitLab, Docker, Kubernetes
+
+2016 – 2020 | Software Developer – WebFactory S.r.l., Modena
+- Sviluppo applicazioni web con Django e Vue.js
+- Integrazione sistemi di pagamento (Stripe, PayPal)
+- Manutenzione database PostgreSQL
+
+FORMAZIONE
+2012 – 2016 | Laurea Magistrale in Informatica – Università di Bologna
+Tesi: "Sistemi di raccomandazione basati su machine learning" – Voto: 110/110 con lode
+
+COMPETENZE TECNICHE
+Linguaggi: Python, JavaScript, TypeScript, SQL
+Framework: FastAPI, Django, Vue.js, React
+Database: PostgreSQL, MongoDB, Redis
+DevOps: Docker, Kubernetes, CI/CD, AWS
+
+LINGUE
+Italiano: madrelingua | Inglese: C1 | Tedesco: B1
+
+INTERESSI
+Open source, intelligenza artificiale, fotografia digitale

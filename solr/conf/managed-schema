@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema name="documents" version="1.6">
+
+  <field name="_version_" type="plong" indexed="false" stored="false"/>
+  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+  <field name="title" type="text_it" indexed="true" stored="true"/>
+  <field name="type" type="string" indexed="true" stored="true"/>
+  <field name="author" type="string" indexed="true" stored="true"/>
+  <field name="upload_date" type="pdate" indexed="true" stored="true"/>
+  <field name="tags" type="strings" indexed="true" stored="true" multiValued="true"/>
+  <field name="text_content" type="text_it" indexed="true" stored="true"/>
+  <field name="summary" type="text_it" indexed="true" stored="true"/>
+  <field name="uploaded_by" type="string" indexed="true" stored="true"/>
+
+  <uniqueKey>id</uniqueKey>
+
+  <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+  <fieldType name="strings" class="solr.StrField" sortMissingLast="true" omitNorms="true" multiValued="true"/>
+  <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+  <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
+
+  <fieldType name="text_it" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_it.txt"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_it.txt" format="snowball"/>
+      <filter class="solr.ItalianLightStemFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_it.txt"/>
+      <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_it.txt" format="snowball"/>
+      <filter class="solr.ItalianLightStemFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+</schema>

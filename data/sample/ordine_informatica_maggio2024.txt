@@ -1,0 +1,31 @@
+ORDINE DI ACQUISTO N. OA-2024-071
+
+Emittente: Rossi & Figli S.r.l.
+Responsabile acquisti: Dott.ssa Anna Ricci – a.ricci@rossifigli.it
+Data: 8 maggio 2024
+
+Fornitore: TechStore Pro S.r.l.
+Via Digitale 15, Roma (RM)
+P.IVA: 07890123456
+
+ARTICOLI ORDINATI:
+
+Pos.  Prodotto                                  Q.tà   Prezzo     Importo
+1     Laptop HP EliteBook 840 G10 (i7, 32GB)    3      € 1.450    € 4.350
+2     Dock station HP Thunderbolt G4             3      €   280    €   840
+3     Webcam Logitech Brio 505 Full HD           5      €   120    €   600
+4     Cuffie noise-cancelling Sony WH-1000XM5    5      €   320    € 1.600
+5     Hub USB-C 10 porte                         3      €    65    €   195
+
+Subtotale:    € 7.585,00
+Sconto 5%:    –  € 379,25
+Imponibile:   € 7.205,75
+IVA 22%:      € 1.585,27
+TOTALE:       € 8.791,02
+
+Condizioni di fornitura:
+- Consegna entro 7 giorni lavorativi
+- Garanzia minima 2 anni on-site
+- Configurazione OS inclusa (Windows 11 Pro)
+
+Indirizzo consegna: Via Roma 12, Milano – Ref. IT Dept. Marco Sala
