@@ -17,9 +17,10 @@ def extract_text(filename: str, content: bytes) -> str:
 
 def _from_pdf(content: bytes) -> str:
     try:
-        from pypdf import PdfReader
-        reader = PdfReader(io.BytesIO(content))
-        pages = [page.extract_text() or "" for page in reader.pages]
+        import fitz  # pymupdf
+        doc = fitz.open(stream=content, filetype="pdf")
+        pages = [page.get_text("text") for page in doc]
+        doc.close()
         return "\n".join(pages).strip()
     except Exception as exc:
         logger.error("PDF extraction error: %s", exc)
