@@ -50,7 +50,17 @@ export const documentsApi = {
   getById: (id: string) =>
     api.get<DocumentDetail>(`/documents/${id}`),
 
-  downloadUrl: (id: string) => `/documents/${id}/download`,
+  download: (id: string, filename: string) =>
+    api.get(`/documents/${id}/download`, { responseType: "blob" }).then((res) => {
+      const url = URL.createObjectURL(res.data as Blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }),
 };
 
 export default api;

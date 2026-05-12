@@ -41,7 +41,7 @@ export default function DocumentPage() {
       confirmButtonText: "Scarica",
     });
     if (result.isConfirmed && id) {
-      window.location.href = documentsApi.downloadUrl(id);
+      await documentsApi.download(id, doc?.original_filename ?? `documento-${id}`);
     }
   };
 
