@@ -64,6 +64,14 @@ export const documentsApi = {
   delete: (id: string) =>
     api.delete(`/documents/${id}`),
 
+  regenerateSummary: (id: string) =>
+    api.post<DocumentDetail>(`/documents/${id}/regenerate-summary`),
+
+  preview: (id: string) =>
+    api.get(`/documents/${id}/preview`, { responseType: "blob" }).then((res) =>
+      URL.createObjectURL(res.data as Blob)
+    ),
+
   download: (id: string, filename: string) =>
     api.get(`/documents/${id}/download`, { responseType: "blob" }).then((res) => {
       const url = URL.createObjectURL(res.data as Blob);

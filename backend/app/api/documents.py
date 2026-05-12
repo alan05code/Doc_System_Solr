@@ -17,6 +17,7 @@ from app.services.document_service import (
     get_document,
     get_file_path,
     list_documents,
+    regenerate_summary,
     update_document,
     upload_document,
 )
@@ -44,13 +45,14 @@ async def upload(
     type: str = Form(...),
     author: str = Form(...),
     tags: str = Form(default=""),
+    summary: Optional[str] = Form(default=None),
     current_user: UserOut = Depends(get_current_user),
 ):
     tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
     meta = DocumentMeta(title=title, type=type, author=author, tags=tag_list)
     content = await file.read()
     try:
-        doc = upload_document(file.filename or "document", content, meta, current_user.id)
+        doc = upload_document(file.filename or "document", content, meta, current_user.id, summary)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc))
     log_action(current_user.id, "upload", doc.id, {"filename": file.filename})
@@ -115,6 +117,30 @@ def get_doc(doc_id: str, current_user: UserOut = Depends(get_current_user)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento non trovato")
     log_action(current_user.id, "view", doc_id)
     return doc
+
+
+@router.post("/{doc_id}/regenerate-summary", response_model=DocumentOut)
+def regen_summary(doc_id: str, current_user: UserOut = Depends(get_current_user)):
+    doc = regenerate_summary(doc_id)
+    if not doc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento non trovato")
+    log_action(current_user.id, "regenerate_summary", doc_id)
+    return doc
+
+
+@router.get("/{doc_id}/preview")
+def preview(doc_id: str, current_user: UserOut = Depends(get_current_user)):
+    doc = get_document(doc_id)
+    if not doc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento non trovato")
+    path = get_file_path(doc_id)
+    if not path or not path.exists():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File non trovato su disco")
+    ext = doc.original_filename.rsplit(".", 1)[-1].lower()
+    mime = {"pdf": "application/pdf", "txt": "text/plain; charset=utf-8"}.get(
+        ext, "application/octet-stream"
+    )
+    return FileResponse(path=str(path), media_type=mime, headers={"Content-Disposition": "inline"})
 
 
 @router.get("/{doc_id}/download")

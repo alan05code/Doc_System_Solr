@@ -36,7 +36,7 @@ export default function Layout({ user, onLogout, children }: Props) {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="h-screen flex bg-gray-50 overflow-hidden">
       {/* Sidebar */}
       <aside className="w-60 bg-white border-r border-gray-200 flex flex-col shrink-0">
         {/* Logo */}

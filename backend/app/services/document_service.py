@@ -69,7 +69,10 @@ def analyze_document(filename: str, content: bytes) -> DocumentAnalysis:
     return DocumentAnalysis(**meta, summary=summary)
 
 
-def upload_document(filename: str, content: bytes, meta: DocumentMeta, user_id: str) -> DocumentOut:
+def upload_document(
+    filename: str, content: bytes, meta: DocumentMeta, user_id: str,
+    pregenerated_summary: Optional[str] = None,
+) -> DocumentOut:
     _validate_file(filename, content)
     text_content = extract_text(filename, content)
 
@@ -79,7 +82,7 @@ def upload_document(filename: str, content: bytes, meta: DocumentMeta, user_id: 
     file_path = upload_dir / stored_name
     file_path.write_bytes(content)
 
-    summary = generate_summary(text_content)
+    summary = pregenerated_summary if pregenerated_summary is not None else generate_summary(text_content)
 
     now = datetime.now(timezone.utc)
     doc = {
@@ -119,6 +122,26 @@ def update_document(doc_id: str, fields: dict) -> Optional[DocumentOut]:
         return None
     _index_in_solr(doc)
     return _serialize(doc)
+
+
+def regenerate_summary(doc_id: str) -> Optional[DocumentOut]:
+    try:
+        oid = ObjectId(doc_id)
+    except Exception:
+        return None
+    doc = documents_col().find_one({"_id": oid}, {"text_content": 1})
+    if not doc:
+        return None
+    summary = generate_summary(doc.get("text_content", ""))
+    updated = documents_col().find_one_and_update(
+        {"_id": oid},
+        {"$set": {"summary": summary}},
+        return_document=ReturnDocument.AFTER,
+    )
+    if not updated:
+        return None
+    _index_in_solr(updated)
+    return _serialize(updated)
 
 
 def delete_document(doc_id: str) -> bool:

@@ -98,6 +98,7 @@ export default function UploadPage() {
     fd.append("type", entry.type);
     fd.append("author", entry.author.trim());
     fd.append("tags", entry.tags);
+    if (entry.summary) fd.append("summary", entry.summary);
     try {
       const { data } = await documentsApi.upload(fd);
       patch(entry.uid, { status: "done", docId: data.id });
