@@ -94,7 +94,7 @@ export default function Layout({ user, onLogout, children }: Props) {
 
       {/* Main content */}
       <main className="flex-1 overflow-auto h-full">
-        <div className="max-w-6xl mx-auto px-8 py-8 h-full">{children}</div>
+        <div className="max-w-6xl mx-auto px-8 py-8 min-h-full">{children}</div>
       </main>
     </div>
   );
