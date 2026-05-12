@@ -7,16 +7,21 @@ import DocumentCard from "@/components/DocumentCard";
 
 const EMPTY: SearchFilters = { q: "", type: "", author: "", date_from: "", date_to: "", page: 1, page_size: 10 };
 
+const INPUT_CLS =
+  "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition";
+
 export default function SearchPage() {
   const [submitted, setSubmitted] = useState<SearchFilters>(EMPTY);
   const [draft, setDraft] = useState<SearchFilters>(EMPTY);
   const [showFilters, setShowFilters] = useState(false);
 
-  const queryKey = ["search", submitted];
   const { data, isLoading, isFetching } = useQuery({
-    queryKey,
+    queryKey: ["search", submitted],
     queryFn: () => {
-      const params: Record<string, string | number> = { page: submitted.page ?? 1, page_size: submitted.page_size ?? 10 };
+      const params: Record<string, string | number> = {
+        page: submitted.page ?? 1,
+        page_size: submitted.page_size ?? 10,
+      };
       if (submitted.q) params.q = submitted.q;
       if (submitted.type) params.type = submitted.type;
       if (submitted.author) params.author = submitted.author;
@@ -48,34 +53,36 @@ export default function SearchPage() {
       <h1 className="text-2xl font-bold text-gray-900">Ricerca documenti</h1>
 
       {/* Search bar */}
-      <form onSubmit={handleSearch} className="flex gap-3">
+      <form onSubmit={handleSearch} className="flex gap-2">
         <div className="flex-1 relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={17} />
           <input
             value={draft.q}
             onChange={(e) => setDraft((d) => ({ ...d, q: e.target.value }))}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
             placeholder="Cerca nel testo dei documenti…"
           />
         </div>
+
         <button
           type="button"
           onClick={() => setShowFilters((v) => !v)}
           className={`flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-medium transition-colors ${
             showFilters || hasFilters
-              ? "border-primary-300 bg-primary-50 text-primary-600"
-              : "border-gray-300 text-gray-600 hover:bg-gray-50"
+              ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+              : "border-gray-300 text-gray-600 bg-white hover:bg-gray-50"
           }`}
         >
-          <Filter size={16} />
+          <Filter size={15} />
           Filtri
           {hasFilters && (
-            <span className="w-2 h-2 bg-primary-600 rounded-full" />
+            <span className="w-2 h-2 bg-indigo-600 rounded-full" />
           )}
         </button>
+
         <button
           type="submit"
-          className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-medium transition-colors"
+          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors"
         >
           Cerca
         </button>
@@ -83,59 +90,68 @@ export default function SearchPage() {
 
       {/* Filters panel */}
       {showFilters && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Tipologia</label>
-            <select
-              value={draft.type}
-              onChange={(e) => setDraft((d) => ({ ...d, type: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
-              <option value="">Tutte</option>
-              {DOCUMENT_TYPES.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </select>
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Tipologia</label>
+              <select
+                value={draft.type}
+                onChange={(e) => setDraft((d) => ({ ...d, type: e.target.value }))}
+                className={INPUT_CLS}
+              >
+                <option value="">Tutte</option>
+                {DOCUMENT_TYPES.map(({ value, label }) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Autore</label>
+              <input
+                value={draft.author}
+                onChange={(e) => setDraft((d) => ({ ...d, author: e.target.value }))}
+                className={INPUT_CLS}
+                placeholder="es. Mario Rossi"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Data da</label>
+              <input
+                type="date"
+                value={draft.date_from}
+                onChange={(e) => setDraft((d) => ({ ...d, date_from: e.target.value }))}
+                className={INPUT_CLS}
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Data a</label>
+              <input
+                type="date"
+                value={draft.date_to}
+                onChange={(e) => setDraft((d) => ({ ...d, date_to: e.target.value }))}
+                className={INPUT_CLS}
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Autore</label>
-            <input
-              value={draft.author}
-              onChange={(e) => setDraft((d) => ({ ...d, author: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="es. Mario Rossi"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Data da</label>
-            <input
-              type="date"
-              value={draft.date_from}
-              onChange={(e) => setDraft((d) => ({ ...d, date_from: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Data a</label>
-            <input
-              type="date"
-              value={draft.date_to}
-              onChange={(e) => setDraft((d) => ({ ...d, date_to: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-
-          <div className="col-span-2 flex justify-end">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={clearFilters}
-              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-red-500 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors"
             >
               <X size={12} />
               Cancella filtri
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSearch()}
+              className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition-colors"
+            >
+              Applica
             </button>
           </div>
         </div>
@@ -151,10 +167,14 @@ export default function SearchPage() {
           </div>
         ) : data && data.items.length > 0 ? (
           <>
-            <p className="text-sm text-gray-500 mb-4">
-              {data.total} risultat{data.total === 1 ? "o" : "i"}
-              {submitted.q && submitted.q !== "*" && ` per "${submitted.q}"`}
+            <p className="text-xs text-gray-500 mb-4">
+              <span className="font-semibold text-gray-700">{data.total}</span>{" "}
+              risultat{data.total === 1 ? "o" : "i"}
+              {submitted.q && submitted.q !== "*" && (
+                <span> per <span className="font-medium">"{submitted.q}"</span></span>
+              )}
             </p>
+
             <div className="grid grid-cols-2 gap-4">
               {data.items.map((doc) => (
                 <DocumentCard key={doc.id} doc={doc} />
@@ -167,17 +187,17 @@ export default function SearchPage() {
                 <button
                   disabled={(submitted.page ?? 1) <= 1}
                   onClick={() => goPage((submitted.page ?? 1) - 1)}
-                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                  className="px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 text-gray-600 transition-colors"
                 >
                   ← Precedente
                 </button>
-                <span className="text-sm text-gray-600">
-                  Pag. {submitted.page} / {totalPages}
+                <span className="text-xs text-gray-500 px-2">
+                  {submitted.page} / {totalPages}
                 </span>
                 <button
                   disabled={(submitted.page ?? 1) >= totalPages}
                   onClick={() => goPage((submitted.page ?? 1) + 1)}
-                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                  className="px-3 py-1.5 text-xs font-medium border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 text-gray-600 transition-colors"
                 >
                   Successiva →
                 </button>
@@ -185,8 +205,8 @@ export default function SearchPage() {
             )}
           </>
         ) : (
-          <div className="text-center py-16 text-gray-400">
-            <Search size={40} className="mx-auto mb-3 opacity-30" />
+          <div className="text-center py-16 border border-dashed border-gray-200 rounded-xl text-gray-400">
+            <Search size={36} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">Nessun documento trovato</p>
           </div>
         )}

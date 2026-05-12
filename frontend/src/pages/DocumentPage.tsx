@@ -5,25 +5,18 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import Swal from "sweetalert2";
 import {
-  ArrowLeft,
-  Download,
-  Calendar,
-  User,
-  Tag,
-  FileText,
-  Sparkles,
-  ChevronDown,
-  ChevronUp,
+  ArrowLeft, Download, Calendar, User, Tag,
+  FileText, Sparkles, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { documentsApi } from "@/services/api";
 
-const TYPE_COLOR: Record<string, string> = {
-  contratto: "bg-blue-100 text-blue-700",
-  fattura: "bg-green-100 text-green-700",
-  ordine: "bg-yellow-100 text-yellow-700",
-  cv: "bg-purple-100 text-purple-700",
-  comunicazione: "bg-orange-100 text-orange-700",
-  altro: "bg-gray-100 text-gray-700",
+const TYPE_STYLE: Record<string, string> = {
+  contratto:     "bg-blue-50 text-blue-700 border border-blue-100",
+  fattura:       "bg-emerald-50 text-emerald-700 border border-emerald-100",
+  ordine:        "bg-amber-50 text-amber-700 border border-amber-100",
+  cv:            "bg-violet-50 text-violet-700 border border-violet-100",
+  comunicazione: "bg-orange-50 text-orange-700 border border-orange-100",
+  altro:         "bg-gray-100 text-gray-600 border border-gray-200",
 };
 
 export default function DocumentPage() {
@@ -66,7 +59,7 @@ export default function DocumentPage() {
     return (
       <div className="text-center py-16">
         <p className="text-gray-500">Documento non trovato.</p>
-        <button onClick={() => navigate(-1)} className="text-primary-600 text-sm hover:underline mt-2">
+        <button onClick={() => navigate(-1)} className="text-indigo-600 text-sm hover:underline mt-2">
           ← Torna indietro
         </button>
       </div>
@@ -77,21 +70,21 @@ export default function DocumentPage() {
   const hasMore = doc.text_content.length > 600;
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="max-w-3xl space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500"
         >
-          <ArrowLeft size={20} className="text-gray-600" />
+          <ArrowLeft size={19} />
         </button>
         <h1 className="text-xl font-bold text-gray-900 flex-1 line-clamp-1">{doc.title}</h1>
         <button
           onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors"
         >
-          <Download size={16} />
+          <Download size={15} />
           Scarica
         </button>
       </div>
@@ -99,11 +92,11 @@ export default function DocumentPage() {
       {/* Metadata card */}
       <div className="bg-white border border-gray-200 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-5">
-          <div className="p-2.5 bg-primary-50 rounded-xl">
-            <FileText className="text-primary-600" size={22} />
+          <div className="p-2.5 bg-indigo-50 rounded-xl">
+            <FileText className="text-indigo-600" size={20} />
           </div>
           <div>
-            <span className={`text-xs font-medium px-2 py-1 rounded-full ${TYPE_COLOR[doc.type] ?? TYPE_COLOR.altro}`}>
+            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${TYPE_STYLE[doc.type] ?? TYPE_STYLE.altro}`}>
               {doc.type}
             </span>
             <p className="text-xs text-gray-400 mt-1">{doc.original_filename}</p>
@@ -111,20 +104,20 @@ export default function DocumentPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-sm">
-          <div className="flex items-center gap-2 text-gray-600">
-            <User size={14} className="text-gray-400" />
+          <div className="flex items-center gap-2 text-gray-700">
+            <User size={14} className="text-gray-400 shrink-0" />
             <span>{doc.author}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Calendar size={14} className="text-gray-400" />
+          <div className="flex items-center gap-2 text-gray-700">
+            <Calendar size={14} className="text-gray-400 shrink-0" />
             <span>{format(new Date(doc.upload_date), "d MMMM yyyy, HH:mm", { locale: it })}</span>
           </div>
           {doc.tags.length > 0 && (
-            <div className="flex items-center gap-2 text-gray-600 col-span-2">
-              <Tag size={14} className="text-gray-400" />
+            <div className="flex items-start gap-2 text-gray-700 col-span-2">
+              <Tag size={14} className="text-gray-400 mt-0.5 shrink-0" />
               <div className="flex gap-1.5 flex-wrap">
                 {doc.tags.map((tag) => (
-                  <span key={tag} className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">
+                  <span key={tag} className="bg-gray-100 text-gray-600 text-xs px-2.5 py-0.5 rounded-full border border-gray-200">
                     {tag}
                   </span>
                 ))}
@@ -137,11 +130,11 @@ export default function DocumentPage() {
       {/* AI Summary */}
       {doc.summary ? (
         <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles size={16} className="text-indigo-500" />
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles size={15} className="text-indigo-500" />
             <span className="text-sm font-semibold text-indigo-700">Sommario AI</span>
           </div>
-          <p className="text-sm text-indigo-800 leading-relaxed">{doc.summary}</p>
+          <p className="text-sm text-indigo-900 leading-relaxed">{doc.summary}</p>
         </div>
       ) : (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-2 text-sm text-gray-400">
@@ -150,7 +143,7 @@ export default function DocumentPage() {
         </div>
       )}
 
-      {/* Text content */}
+      {/* Extracted text */}
       <div className="bg-white border border-gray-200 rounded-xl p-6">
         <h2 className="text-sm font-semibold text-gray-700 mb-4">Testo estratto</h2>
         <div className="relative">
@@ -165,12 +158,12 @@ export default function DocumentPage() {
         {hasMore && (
           <button
             onClick={() => setTextExpanded((v) => !v)}
-            className="mt-3 flex items-center gap-1.5 text-xs text-primary-600 hover:underline"
+            className="mt-4 flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
           >
             {textExpanded ? (
-              <><ChevronUp size={14} />Mostra meno</>
+              <><ChevronUp size={13} />Mostra meno</>
             ) : (
-              <><ChevronDown size={14} />Mostra tutto il testo</>
+              <><ChevronDown size={13} />Mostra tutto il testo</>
             )}
           </button>
         )}

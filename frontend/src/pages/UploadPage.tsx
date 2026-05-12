@@ -12,6 +12,9 @@ const ACCEPTED = {
   "text/plain": [".txt"],
 };
 
+const INPUT_CLS =
+  "w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-50 disabled:opacity-60 transition";
+
 export default function UploadPage() {
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
@@ -57,9 +60,8 @@ export default function UploadPage() {
     try {
       const { data } = await documentsApi.upload(fd);
       const summaryMsg = data.summary
-        ? `<div class="mt-2 text-sm text-indigo-600">✨ Sommario AI generato con successo</div>`
+        ? `<div class="mt-2 text-sm text-indigo-600">✨ Sommario AI generato</div>`
         : `<div class="mt-2 text-sm text-gray-400">Sommario AI non disponibile</div>`;
-
       await Swal.fire({
         icon: "success",
         title: "Documento caricato",
@@ -78,74 +80,90 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="h-full flex flex-col gap-6">
+      {/* Page header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Carica documento</h1>
         <p className="text-gray-500 text-sm mt-1">PDF, DOCX e TXT — max 50 MB</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Dropzone */}
+      {/* Two-column layout */}
+      <form onSubmit={handleSubmit} className="flex gap-6 flex-1 min-h-0">
+
+        {/* LEFT — Dropzone */}
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
+          className={`flex-1 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl cursor-pointer transition-colors ${
             isDragActive
-              ? "border-primary-400 bg-primary-50"
+              ? "border-indigo-400 bg-indigo-50"
               : file
-              ? "border-green-400 bg-green-50"
-              : "border-gray-300 hover:border-primary-300 hover:bg-gray-50"
+              ? "border-emerald-400 bg-emerald-50"
+              : "border-gray-300 hover:border-indigo-300 hover:bg-gray-50"
           } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <input {...getInputProps()} />
+
           {file ? (
-            <div className="flex items-center justify-center gap-3">
-              <FileText className="text-green-600" size={28} />
-              <div className="text-left">
-                <p className="font-medium text-gray-900">{file.name}</p>
-                <p className="text-xs text-gray-500">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB
-                </p>
+            <div className="text-center px-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-5">
+                <FileText className="text-emerald-600" size={32} />
               </div>
+              <p className="font-semibold text-gray-900 text-base mb-1">{file.name}</p>
+              <p className="text-sm text-gray-500 mb-5">
+                {(file.size / 1024 / 1024).toFixed(2)} MB
+              </p>
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                className="ml-2 p-1 hover:bg-gray-200 rounded"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-white hover:border-red-300 hover:text-red-500 transition-colors"
               >
                 <X size={14} />
+                Rimuovi file
               </button>
             </div>
           ) : (
-            <>
-              <Upload className="mx-auto text-gray-400 mb-3" size={32} />
-              <p className="text-sm font-medium text-gray-700">
-                {isDragActive ? "Rilascia qui" : "Trascina un file o clicca per selezionare"}
+            <div className="text-center px-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-5">
+                <Upload className="text-gray-400" size={30} />
+              </div>
+              <p className="font-semibold text-gray-700 text-base mb-2">
+                {isDragActive ? "Rilascia qui il file" : "Trascina un file qui"}
               </p>
-              <p className="text-xs text-gray-400 mt-1">PDF · DOCX · TXT</p>
-            </>
+              <p className="text-sm text-gray-400 mb-4">oppure clicca per selezionare</p>
+              <div className="flex items-center justify-center gap-2">
+                {["PDF", "DOCX", "TXT"].map((ext) => (
+                  <span key={ext} className="px-2.5 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-500 font-medium">
+                    {ext}
+                  </span>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
-        {/* Metadata */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Titolo *</label>
+        {/* RIGHT — Metadata + submit */}
+        <div className="w-96 flex flex-col gap-5">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex-1 space-y-4">
+            <h2 className="text-sm font-semibold text-gray-800 mb-1">Informazioni documento</h2>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Titolo *</label>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
+                className={INPUT_CLS}
                 placeholder="Titolo del documento"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Tipologia *</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Tipologia *</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 bg-white"
+                className={INPUT_CLS}
               >
                 {DOCUMENT_TYPES.map(({ value, label }) => (
                   <option key={value} value={value}>{label}</option>
@@ -154,54 +172,55 @@ export default function UploadPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Autore *</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Autore *</label>
               <input
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
+                className={INPUT_CLS}
                 placeholder="es. Mario Rossi"
               />
             </div>
 
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">
                 Tag <span className="text-gray-400 font-normal">(separati da virgola)</span>
               </label>
               <input
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
+                className={INPUT_CLS}
                 placeholder="es. 2024, importante, fornitore"
               />
             </div>
+
+            {/* AI notice */}
+            <div className="flex items-center gap-2.5 text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2.5">
+              <Sparkles size={13} className="shrink-0 text-indigo-500" />
+              <span>Sommario AI generato automaticamente dopo il caricamento.</span>
+            </div>
           </div>
-        </div>
 
-        {/* AI notice */}
-        <div className="flex items-start gap-2 text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-lg px-4 py-3">
-          <Sparkles size={14} className="mt-0.5 shrink-0" />
-          <span>Il sommario AI verrà generato automaticamente dopo il caricamento.</span>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors shadow-sm"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                Caricamento in corso…
+              </>
+            ) : (
+              <>
+                <Upload size={17} />
+                Carica documento
+              </>
+            )}
+          </button>
         </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white font-medium py-3 rounded-xl transition-colors"
-        >
-          {loading ? (
-            <>
-              <Loader2 size={18} className="animate-spin" />
-              Caricamento in corso…
-            </>
-          ) : (
-            <>
-              <Upload size={18} />
-              Carica documento
-            </>
-          )}
-        </button>
       </form>
     </div>
   );

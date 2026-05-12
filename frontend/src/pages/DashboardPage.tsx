@@ -18,6 +18,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Page header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">
           Benvenuto, {user?.username}
@@ -27,43 +28,46 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
+        {/* Total docs */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary-50 rounded-lg">
-              <Files className="text-primary-600" size={18} />
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-indigo-50 rounded-lg">
+              <Files className="text-indigo-600" size={18} />
             </div>
-            <span className="text-sm text-gray-600">Documenti totali</span>
+            <span className="text-sm text-gray-600 font-medium">Documenti totali</span>
           </div>
           <p className="text-3xl font-bold text-gray-900">
-            {isLoading ? "…" : total}
+            {isLoading ? "—" : total}
           </p>
         </div>
 
+        {/* Upload CTA */}
         <Link
           to="/upload"
-          className="bg-primary-600 hover:bg-primary-700 transition-colors rounded-xl p-5 flex flex-col justify-between group"
+          className="bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-xl p-5 flex flex-col justify-between group"
         >
-          <div className="p-2 bg-white/20 rounded-lg w-fit mb-2">
+          <div className="p-2 bg-white/20 rounded-lg w-fit mb-3">
             <Upload className="text-white" size={18} />
           </div>
           <div>
-            <p className="text-white font-semibold">Carica documento</p>
-            <p className="text-primary-200 text-xs">PDF, DOCX, TXT</p>
+            <p className="text-white font-semibold text-sm">Carica documento</p>
+            <p className="text-indigo-200 text-xs mt-0.5">PDF, DOCX, TXT</p>
           </div>
         </Link>
 
+        {/* Search CTA */}
         <Link
           to="/search"
-          className="bg-white border border-gray-200 hover:border-primary-300 rounded-xl p-5 flex flex-col justify-between transition-colors group"
+          className="bg-white border border-gray-200 hover:border-indigo-200 hover:shadow-sm rounded-xl p-5 flex flex-col justify-between transition-all"
         >
-          <div className="p-2 bg-primary-50 rounded-lg w-fit mb-2">
-            <Search className="text-primary-600" size={18} />
+          <div className="p-2 bg-indigo-50 rounded-lg w-fit mb-3">
+            <Search className="text-indigo-600" size={18} />
           </div>
           <div>
-            <p className="text-gray-900 font-semibold">Ricerca</p>
-            <p className="text-gray-400 text-xs">Full-text + filtri</p>
+            <p className="text-gray-900 font-semibold text-sm">Ricerca</p>
+            <p className="text-gray-400 text-xs mt-0.5">Full-text + filtri</p>
           </div>
         </Link>
       </div>
@@ -72,10 +76,10 @@ export default function DashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-            <FileText size={16} />
+            <FileText size={16} className="text-gray-400" />
             Documenti recenti
           </h2>
-          <Link to="/search" className="text-xs text-primary-600 hover:underline">
+          <Link to="/search" className="text-xs text-indigo-600 hover:text-indigo-700 hover:underline">
             Vedi tutti →
           </Link>
         </div>
@@ -87,10 +91,10 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : recent.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">
-            <FileText size={40} className="mx-auto mb-3 opacity-30" />
+          <div className="text-center py-16 border border-dashed border-gray-200 rounded-xl text-gray-400">
+            <FileText size={36} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">Nessun documento ancora caricato</p>
-            <Link to="/upload" className="text-primary-600 text-sm hover:underline mt-1 inline-block">
+            <Link to="/upload" className="text-indigo-600 text-sm hover:underline mt-2 inline-block">
               Carica il primo →
             </Link>
           </div>

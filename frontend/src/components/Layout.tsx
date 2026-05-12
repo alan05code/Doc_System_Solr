@@ -1,13 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import type { User } from "@/types";
-import {
-  FileText,
-  Upload,
-  Search,
-  LayoutDashboard,
-  LogOut,
-} from "lucide-react";
+import { FileText, Upload, Search, LayoutDashboard, LogOut } from "lucide-react";
 
 interface Props {
   user: User;
@@ -17,8 +11,8 @@ interface Props {
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-  { to: "/upload", label: "Carica", Icon: Upload },
-  { to: "/search", label: "Cerca", Icon: Search },
+  { to: "/upload",    label: "Carica",    Icon: Upload },
+  { to: "/search",    label: "Cerca",     Icon: Search },
 ];
 
 export default function Layout({ user, onLogout, children }: Props) {
@@ -42,53 +36,65 @@ export default function Layout({ user, onLogout, children }: Props) {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-60 bg-white border-r border-gray-200 flex flex-col">
-        <div className="px-6 py-5 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <FileText className="text-primary-600" size={22} />
-            <span className="font-semibold text-gray-900 text-sm leading-tight">
-              Sistema<br />Documentale
-            </span>
+      <aside className="w-60 bg-white border-r border-gray-200 flex flex-col shrink-0">
+        {/* Logo */}
+        <div className="px-5 py-5 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-indigo-600 rounded-lg">
+              <FileText className="text-white" size={16} />
+            </div>
+            <div className="leading-tight">
+              <p className="font-semibold text-gray-900 text-sm">Sistema</p>
+              <p className="text-xs text-gray-500">Documentale</p>
+            </div>
           </div>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          {NAV.map(({ to, label, Icon }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname.startsWith(to)
-                  ? "bg-primary-50 text-primary-600"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-              }`}
-            >
-              <Icon size={18} />
-              {label}
-            </Link>
-          ))}
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
+          {NAV.map(({ to, label, Icon }) => {
+            const active = pathname.startsWith(to);
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+              >
+                <Icon
+                  size={17}
+                  className={active ? "text-indigo-600" : "text-gray-400"}
+                />
+                {label}
+              </Link>
+            );
+          })}
         </nav>
 
+        {/* User + logout */}
         <div className="px-3 py-4 border-t border-gray-100">
           <div className="px-3 py-2 mb-1">
-            <p className="text-xs font-medium text-gray-900">{user.username}</p>
-            <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+            <p className="text-xs font-semibold text-gray-900">{user.username}</p>
+            <p className="text-xs text-gray-400 capitalize">{user.role}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+            className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
           >
-            <LogOut size={18} />
+            <LogOut size={17} />
             Logout
           </button>
         </div>
       </aside>
 
-      {/* Main */}
-      <main className="flex-1 overflow-auto">
-        <div className="max-w-6xl mx-auto px-8 py-8">{children}</div>
+      {/* Main content */}
+      <main className="flex-1 overflow-auto h-full">
+        <div className="max-w-6xl mx-auto px-8 py-8 h-full">{children}</div>
       </main>
     </div>
   );
