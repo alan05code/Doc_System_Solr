@@ -7,7 +7,7 @@ from app.core.config import get_settings
 @lru_cache
 def get_solr() -> pysolr.Solr:
     settings = get_settings()
-    return pysolr.Solr(settings.solr_url, always_commit=True, timeout=10)
+    return pysolr.Solr(settings.solr_url, always_commit=False, timeout=10)
 
 
 def index_document(doc: dict) -> None:

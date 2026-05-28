@@ -19,6 +19,13 @@ logger = logging.getLogger(__name__)
 ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
 
 
+def _parse_oid(doc_id: str) -> Optional[ObjectId]:
+    try:
+        return ObjectId(doc_id)
+    except Exception:
+        return None
+
+
 def _serialize(doc: dict) -> DocumentOut:
     return DocumentOut(
         id=str(doc["_id"]),
@@ -106,9 +113,8 @@ def upload_document(
 
 def update_document(doc_id: str, fields: dict) -> Optional[DocumentOut]:
     """Update mutable metadata fields and re-index in Solr."""
-    try:
-        oid = ObjectId(doc_id)
-    except Exception:
+    oid = _parse_oid(doc_id)
+    if oid is None:
         return None
     if not fields:
         return get_document(doc_id)
@@ -125,9 +131,8 @@ def update_document(doc_id: str, fields: dict) -> Optional[DocumentOut]:
 
 
 def regenerate_summary(doc_id: str) -> Optional[DocumentOut]:
-    try:
-        oid = ObjectId(doc_id)
-    except Exception:
+    oid = _parse_oid(doc_id)
+    if oid is None:
         return None
     doc = documents_col().find_one({"_id": oid}, {"text_content": 1})
     if not doc:
@@ -145,9 +150,8 @@ def regenerate_summary(doc_id: str) -> Optional[DocumentOut]:
 
 
 def delete_document(doc_id: str) -> bool:
-    try:
-        oid = ObjectId(doc_id)
-    except Exception:
+    oid = _parse_oid(doc_id)
+    if oid is None:
         return False
     doc = documents_col().find_one({"_id": oid}, {"file_path": 1})
     if not doc:
@@ -164,8 +168,11 @@ def delete_document(doc_id: str) -> bool:
 
 
 def get_document(doc_id: str) -> Optional[DocumentDetail]:
+    oid = _parse_oid(doc_id)
+    if oid is None:
+        return None
     try:
-        doc = documents_col().find_one({"_id": ObjectId(doc_id)})
+        doc = documents_col().find_one({"_id": oid})
     except Exception:
         return None
     if not doc:
@@ -175,8 +182,11 @@ def get_document(doc_id: str) -> Optional[DocumentDetail]:
 
 
 def get_file_path(doc_id: str) -> Optional[Path]:
+    oid = _parse_oid(doc_id)
+    if oid is None:
+        return None
     try:
-        doc = documents_col().find_one({"_id": ObjectId(doc_id)}, {"file_path": 1})
+        doc = documents_col().find_one({"_id": oid}, {"file_path": 1})
     except Exception:
         return None
     if not doc:

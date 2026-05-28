@@ -7,7 +7,7 @@
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}"/>
   <codecFactory class="solr.SchemaCodecFactory"/>
   <schemaFactory class="ManagedIndexSchemaFactory">
-    <bool name="mutable">true</bool>
+    <bool name="mutable">false</bool>
     <str name="managedSchemaResourceName">managed-schema</str>
   </schemaFactory>
 
@@ -28,8 +28,8 @@
 
   <query>
     <maxBooleanClauses>${solr.max.booleanClauses:1024}</maxBooleanClauses>
-    <filterCache size="512" initialSize="512" autowarmCount="0"/>
-    <queryResultCache size="512" initialSize="512" autowarmCount="0"/>
+    <filterCache size="512" initialSize="512" autowarmCount="128"/>
+    <queryResultCache size="512" initialSize="512" autowarmCount="128"/>
     <documentCache size="512" initialSize="512" autowarmCount="0"/>
     <enableLazyFieldLoading>true</enableLazyFieldLoading>
     <queryResultWindowSize>20</queryResultWindowSize>
@@ -57,7 +57,7 @@
       <str name="q">solrpingquery</str>
     </lst>
     <lst name="defaults">
-      <str name="echoParams">all</str>
+      <str name="echoParams">none</str>
     </lst>
   </requestHandler>
 

@@ -97,3 +97,7 @@ Backend reads from `backend/.env` (copy `.env.example`). Key variables:
 Frontend reads from `frontend/.env` — only `VITE_API_BASE` (used when not proxying through Vite dev server).
 
 `get_settings()` is `@lru_cache` — call `get_settings.cache_clear()` between tests if overriding env vars.
+
+## Development Guide
+
+See [`docs/DEVELOPMENT_GUIDE.md`](docs/DEVELOPMENT_GUIDE.md) for rules on security, MongoDB indexes, Solr configuration, frontend patterns, and a checklist for new endpoints. Rules are derived from real bugs found during code review.

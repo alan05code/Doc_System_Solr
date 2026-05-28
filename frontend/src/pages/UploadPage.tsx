@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { documentsApi } from "@/services/api";
 import { DOCUMENT_TYPES } from "@/types";
+import { getErrorMessage } from "@/utils/errors";
 
 const ACCEPTED = {
   "application/pdf": [".pdf"],
@@ -104,9 +105,7 @@ export default function UploadPage() {
       patch(entry.uid, { status: "done", docId: data.id });
       return true;
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
-        "Errore durante il caricamento.";
+      const msg = getErrorMessage(err, "Errore durante il caricamento.");
       patch(entry.uid, { status: "error", error: msg });
       return false;
     }

@@ -89,8 +89,18 @@ def list_all(
     return SearchResult(total=total, page=page, page_size=page_size, items=items)
 
 
+def _check_ownership(doc_id: str, current_user: UserOut) -> None:
+    """Raise 403 if current_user is not the owner and not an admin."""
+    doc = get_document(doc_id)
+    if not doc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento non trovato")
+    if doc.uploaded_by != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Non autorizzato")
+
+
 @router.delete("/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_doc(doc_id: str, current_user: UserOut = Depends(get_current_user)):
+    _check_ownership(doc_id, current_user)
     if not delete_document(doc_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento non trovato")
     log_action(current_user.id, "delete", doc_id)
@@ -102,6 +112,7 @@ def update_doc(
     data: DocumentUpdate,
     current_user: UserOut = Depends(get_current_user),
 ):
+    _check_ownership(doc_id, current_user)
     fields = data.model_dump(exclude_none=True)
     doc = update_document(doc_id, fields)
     if not doc:

@@ -10,15 +10,7 @@ import {
 } from "lucide-react";
 import { documentsApi } from "@/services/api";
 import { DOCUMENT_TYPES, type DocumentType } from "@/types";
-
-const TYPE_STYLE: Record<string, string> = {
-  contratto:     "bg-blue-50 text-blue-700 border border-blue-100",
-  fattura:       "bg-emerald-50 text-emerald-700 border border-emerald-100",
-  ordine:        "bg-amber-50 text-amber-700 border border-amber-100",
-  cv:            "bg-violet-50 text-violet-700 border border-violet-100",
-  comunicazione: "bg-orange-50 text-orange-700 border border-orange-100",
-  altro:         "bg-gray-100 text-gray-600 border border-gray-200",
-};
+import { TYPE_STYLE } from "@/constants";
 
 const INPUT_CLS =
   "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition";
@@ -147,7 +139,7 @@ export default function DocumentPage() {
     });
     if (result.isConfirmed && id) {
       await documentsApi.delete(id);
-      navigate("/documents");
+      navigate("/dashboard");
     }
   };
 

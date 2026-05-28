@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { FileText, Loader2, Lock, User } from "lucide-react";
 import { authApi } from "@/services/api";
 import type { User as UserType } from "@/types";
+import { getErrorMessage } from "@/utils/errors";
 
 interface Props {
   onLogin: (token: string, user: UserType) => void;
@@ -35,9 +36,7 @@ export default function LoginPage({ onLogin }: Props) {
       onLogin(data.access_token, data.user);
       navigate(returnTo, { replace: true });
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
-        "Credenziali non valide.";
+      const msg = getErrorMessage(err, "Credenziali non valide.");
       await Swal.fire({ icon: "error", title: "Accesso negato", text: msg });
     } finally {
       setLoading(false);

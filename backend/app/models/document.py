@@ -53,7 +53,7 @@ class SearchResult(BaseModel):
 
 class SearchFilters(BaseModel):
     q: str = Field(default="*")
-    type: Optional[str] = None
+    type: Optional[str] = Field(None, pattern=_TYPE_PATTERN)
     author: Optional[str] = None
     date_from: Optional[datetime] = None
     date_to: Optional[datetime] = None

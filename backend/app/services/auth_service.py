@@ -20,8 +20,6 @@ def _serialize_user(doc: dict) -> UserOut:
 
 def register_user(data: UserRegister) -> UserOut:
     col = users_col()
-    col.create_index("username", unique=True)
-
     now = datetime.now(timezone.utc)
     doc = {
         "username": data.username,
